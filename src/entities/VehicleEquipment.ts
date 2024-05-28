@@ -17,16 +17,28 @@ import { Vehicle } from "./Vehicle";
 export class VehicleEquipment {
   @PrimaryGeneratedColumn({
     type: "int",
-    name: "vehicle_equipment",
+    name: "vehicle_equipment_id",
     unsigned: true,
   })
-  vehicleEquipment: number;
+  vehicleEquipmentId: number;
 
   @Column("int", { name: "vehicle_id", unsigned: true })
   vehicleId: number;
 
   @Column("int", { name: "equipment_id", unsigned: true })
   equipmentId: number;
+
+  @Column("datetime", {
+    name: "created_at",
+    default: () => "CURRENT_TIMESTAMP",
+  })
+  createdAt: Date;
+
+  @Column("datetime", { name: "updated_at", nullable: true })
+  updatedAt: Date | null;
+
+  @Column("datetime", { name: "deleted_at", nullable: true })
+  deletedAt: Date | null;
 
   @ManyToOne(() => Equipment, (equipment) => equipment.vehicleEquipments, {
     onDelete: "CASCADE",

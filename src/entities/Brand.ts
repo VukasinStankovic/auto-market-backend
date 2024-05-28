@@ -6,7 +6,6 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Model } from "./Model";
-import { Vehicle } from "./Vehicle";
 
 @Index("uq_brand_name", ["name"], { unique: true })
 @Entity("brand", { schema: "auto_market" })
@@ -31,7 +30,4 @@ export class Brand {
 
   @OneToMany(() => Model, (model) => model.brand)
   models: Model[];
-
-  @OneToMany(() => Vehicle, (vehicle) => vehicle.brand)
-  vehicles: Vehicle[];
 }

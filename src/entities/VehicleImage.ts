@@ -28,6 +28,18 @@ export class VehicleImage {
   @Column("int", { name: "image_id", unsigned: true })
   imageId: number;
 
+  @Column("datetime", {
+    name: "created_at",
+    default: () => "CURRENT_TIMESTAMP",
+  })
+  createdAt: Date;
+
+  @Column("datetime", { name: "updated_at", nullable: true })
+  updatedAt: Date | null;
+
+  @Column("datetime", { name: "deleted_at", nullable: true })
+  deletedAt: Date | null;
+
   @ManyToOne(() => Image, (image) => image.vehicleImages, {
     onDelete: "CASCADE",
     onUpdate: "CASCADE",

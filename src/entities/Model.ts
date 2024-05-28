@@ -4,9 +4,11 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Brand } from "./Brand";
+import { Vehicle } from "./Vehicle";
 
 @Index("uq_model_name", ["name"], { unique: true })
 @Index("fk_model_brand", ["brandId"], {})
@@ -39,4 +41,7 @@ export class Model {
   })
   @JoinColumn([{ name: "brand_id", referencedColumnName: "brandId" }])
   brand: Brand;
+
+  @OneToMany(() => Vehicle, (vehicle) => vehicle.model)
+  vehicles: Vehicle[];
 }

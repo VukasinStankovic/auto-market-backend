@@ -1,4 +1,11 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  Index,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import { Vehicle } from "./Vehicle";
 
 @Index("uq_transmission_name", ["name"], { unique: true })
 @Entity("transmission", { schema: "auto_market" })
@@ -24,4 +31,7 @@ export class Transmission {
 
   @Column("datetime", { name: "deleted_at", nullable: true })
   deletedAt: Date | null;
+
+  @OneToMany(() => Vehicle, (vehicle) => vehicle.transmission)
+  vehicles: Vehicle[];
 }

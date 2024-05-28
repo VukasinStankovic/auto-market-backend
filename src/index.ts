@@ -3,6 +3,8 @@ import morgan from "morgan";
 import express from "express";
 import {configDotenv} from "dotenv";
 import {AppDataSource} from "./db";
+import {VehicleService} from "./services/vehicle.service";
+
 
 
 const app = express();
@@ -21,10 +23,10 @@ AppDataSource.initialize().then(() => {
     console.log(e);
 });
 
-app.get("/", (req, res) => {
-    res.json({
-        message: "Hello World From ExpressJS and TypeScript!",
-    });
+app.get("/", async (req, res) => {
+    res.json(
+        await VehicleService.getAllVehicles()
+    );
 });
 
 app.get("*", (req, res) => {
