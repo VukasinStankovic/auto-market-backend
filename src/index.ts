@@ -3,7 +3,13 @@ import morgan from "morgan";
 import express from "express";
 import {configDotenv} from "dotenv";
 import {AppDataSource} from "./db";
-import {VehicleService} from "./services/vehicle.service";
+import {VehicleRoute} from "./routes/vehicle.route";
+import {TransmissionRoute} from "./routes/transmission.route";
+import {ModelRoute} from "./routes/model.route";
+import {FuelTypeRoute} from "./routes/fuelType.route";
+import {EquipmentRoute} from "./routes/equipment.route";
+import {ColorRoute} from "./routes/color.route";
+import {BrandRoute} from "./routes/brand.route";
 
 
 
@@ -23,11 +29,14 @@ AppDataSource.initialize().then(() => {
     console.log(e);
 });
 
-app.get("/", async (req, res) => {
-    res.json(
-        await VehicleService.getAllVehicles()
-    );
-});
+app.use("/api/vehicle", VehicleRoute)
+app.use("/api/transmission", TransmissionRoute)
+app.use("/api/model", ModelRoute)
+app.use("/api/fuel-type", FuelTypeRoute)
+app.use("/api/equipment", EquipmentRoute)
+app.use("/api/color", ColorRoute)
+app.use("/api/brand", BrandRoute)
+app.use("/api/body", BrandRoute)
 
 app.get("*", (req, res) => {
     res.status(404).json({
