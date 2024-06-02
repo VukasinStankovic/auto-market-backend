@@ -1,20 +1,20 @@
 import {
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
+    Column,
+    Entity,
+    Index,
+    JoinColumn,
+    ManyToOne,
+    OneToMany,
+    PrimaryGeneratedColumn,
 } from "typeorm";
-import { Body } from "./Body";
-import { Color } from "./Color";
-import { FuelType } from "./FuelType";
-import { Model } from "./Model";
-import { Transmission } from "./Transmission";
-import { User } from "./User";
-import { VehicleEquipment } from "./VehicleEquipment";
-import { VehicleImage } from "./VehicleImage";
+import {Body} from "./Body";
+import {Color} from "./Color";
+import {FuelType} from "./FuelType";
+import {Model} from "./Model";
+import {Transmission} from "./Transmission";
+import {User} from "./User";
+import {VehicleEquipment} from "./VehicleEquipment";
+import {VehicleImage} from "./VehicleImage";
 
 @Index("fk_vehicle_fuel_type", ["fuelTypeId"], {})
 @Index("fk_vehicle_body", ["bodyId"], {})
@@ -22,103 +22,115 @@ import { VehicleImage } from "./VehicleImage";
 @Index("fk_vehicle_transmission", ["transmissionId"], {})
 @Index("fk_vehicle_model", ["modelId"], {})
 @Index("fk_vehicle_user", ["userId"], {})
-@Entity("vehicle", { schema: "auto_market" })
+@Entity("vehicle", {schema: "auto_market"})
 export class Vehicle {
-  @PrimaryGeneratedColumn({ type: "int", name: "vehicle_id", unsigned: true })
-  vehicleId: number;
+    @PrimaryGeneratedColumn({type: "int", name: "vehicle_id", unsigned: true})
+    vehicleId: number;
 
-  @Column("int", { name: "fuel_type_id", unsigned: true })
-  fuelTypeId: number;
+    @Column("int", {name: "fuel_type_id", unsigned: true})
+    fuelTypeId: number;
 
-  @Column("int", { name: "body_id", unsigned: true })
-  bodyId: number;
+    @Column("int", {name: "body_id", unsigned: true})
+    bodyId: number;
 
-  @Column("int", { name: "color_id", unsigned: true })
-  colorId: number;
+    @Column("int", {name: "color_id", unsigned: true})
+    colorId: number;
 
-  @Column("int", { name: "user_id", unsigned: true })
-  userId: number;
+    @Column("int", {name: "user_id", unsigned: true})
+    userId: number;
 
-  @Column("int", { name: "transmission_id", unsigned: true })
-  transmissionId: number;
+    @Column("int", {name: "transmission_id", unsigned: true})
+    transmissionId: number;
 
-  @Column("int", { name: "model_id", unsigned: true })
-  modelId: number;
+    @Column("int", {name: "model_id", unsigned: true})
+    modelId: number;
 
-  @Column("varchar", { name: "name", length: 255 })
-  name: string;
+    @Column("varchar", {name: "name", length: 255})
+    name: string;
 
-  @Column("int", { name: "price", unsigned: true })
-  price: number;
+    @Column("varchar", {name: "number_of_doors", length: 255})
+    numberOfDoors: string;
 
-  @Column("int", { name: "mileage", unsigned: true })
-  mileage: number;
+    @Column("varchar", {name: "number_of_seats", length: 255})
+    numberOfSeats: string;
 
-  @Column("int", { name: "production_year", unsigned: true })
-  productionYear: number;
+    @Column("int", {name: "price", unsigned: true})
+    price: number;
 
-  @Column("datetime", {
-    name: "created_at",
-    default: () => "CURRENT_TIMESTAMP",
-  })
-  createdAt: Date;
+    @Column("int", {name: "mileage", unsigned: true})
+    mileage: number;
 
-  @Column("datetime", { name: "updated_at", nullable: true })
-  updatedAt: Date | null;
+    @Column("int", {name: "production_year", unsigned: true})
+    productionYear: number;
 
-  @Column("datetime", { name: "deleted_at", nullable: true })
-  deletedAt: Date | null;
+    @Column("int", {name: "horsepower", unsigned: true})
+    horsepower: number;
 
-  @ManyToOne(() => Body, (body) => body.vehicles, {
-    onDelete: "CASCADE",
-    onUpdate: "CASCADE",
-  })
-  @JoinColumn([{ name: "body_id", referencedColumnName: "bodyId" }])
-  body: Body;
+    @Column("int", {name: "kilowatts", unsigned: true})
+    kilowatts: number;
 
-  @ManyToOne(() => Color, (color) => color.vehicles, {
-    onDelete: "CASCADE",
-    onUpdate: "CASCADE",
-  })
-  @JoinColumn([{ name: "color_id", referencedColumnName: "colorId" }])
-  color: Color;
+    @Column("datetime", {
+        name: "created_at",
+        default: () => "CURRENT_TIMESTAMP",
+    })
+    createdAt: Date;
 
-  @ManyToOne(() => FuelType, (fuelType) => fuelType.vehicles, {
-    onDelete: "CASCADE",
-    onUpdate: "CASCADE",
-  })
-  @JoinColumn([{ name: "fuel_type_id", referencedColumnName: "fuelTypeId" }])
-  fuelType: FuelType;
+    @Column("datetime", {name: "updated_at", nullable: true})
+    updatedAt: Date | null;
 
-  @ManyToOne(() => Model, (model) => model.vehicles, {
-    onDelete: "CASCADE",
-    onUpdate: "CASCADE",
-  })
-  @JoinColumn([{ name: "model_id", referencedColumnName: "modelId" }])
-  model: Model;
+    @Column("datetime", {name: "deleted_at", nullable: true})
+    deletedAt: Date | null;
 
-  @ManyToOne(() => Transmission, (transmission) => transmission.vehicles, {
-    onDelete: "CASCADE",
-    onUpdate: "CASCADE",
-  })
-  @JoinColumn([
-    { name: "transmission_id", referencedColumnName: "transmissionId" },
-  ])
-  transmission: Transmission;
+    @ManyToOne(() => Body, (body) => body.vehicles, {
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+    })
+    @JoinColumn([{name: "body_id", referencedColumnName: "bodyId"}])
+    body: Body;
 
-  @ManyToOne(() => User, (user) => user.vehicles, {
-    onDelete: "CASCADE",
-    onUpdate: "CASCADE",
-  })
-  @JoinColumn([{ name: "user_id", referencedColumnName: "userId" }])
-  user: User;
+    @ManyToOne(() => Color, (color) => color.vehicles, {
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+    })
+    @JoinColumn([{name: "color_id", referencedColumnName: "colorId"}])
+    color: Color;
 
-  @OneToMany(
-    () => VehicleEquipment,
-    (vehicleEquipment) => vehicleEquipment.vehicle
-  )
-  vehicleEquipments: VehicleEquipment[];
+    @ManyToOne(() => FuelType, (fuelType) => fuelType.vehicles, {
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+    })
+    @JoinColumn([{name: "fuel_type_id", referencedColumnName: "fuelTypeId"}])
+    fuelType: FuelType;
 
-  @OneToMany(() => VehicleImage, (vehicleImage) => vehicleImage.vehicle)
-  vehicleImages: VehicleImage[];
+    @ManyToOne(() => Model, (model) => model.vehicles, {
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+    })
+    @JoinColumn([{name: "model_id", referencedColumnName: "modelId"}])
+    model: Model;
+
+    @ManyToOne(() => Transmission, (transmission) => transmission.vehicles, {
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+    })
+    @JoinColumn([
+        {name: "transmission_id", referencedColumnName: "transmissionId"},
+    ])
+    transmission: Transmission;
+
+    @ManyToOne(() => User, (user) => user.vehicles, {
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+    })
+    @JoinColumn([{name: "user_id", referencedColumnName: "userId"}])
+    user: User;
+
+    @OneToMany(
+        () => VehicleEquipment,
+        (vehicleEquipment) => vehicleEquipment.vehicle
+    )
+    vehicleEquipments: VehicleEquipment[];
+
+    @OneToMany(() => VehicleImage, (vehicleImage) => vehicleImage.vehicle)
+    vehicleImages: VehicleImage[];
 }

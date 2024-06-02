@@ -10,6 +10,7 @@ import {FuelTypeRoute} from "./routes/fuelType.route";
 import {EquipmentRoute} from "./routes/equipment.route";
 import {ColorRoute} from "./routes/color.route";
 import {BrandRoute} from "./routes/brand.route";
+import {BodyRoute} from "./routes/body.route";
 
 
 
@@ -36,7 +37,7 @@ app.use("/api/fuel-type", FuelTypeRoute)
 app.use("/api/equipment", EquipmentRoute)
 app.use("/api/color", ColorRoute)
 app.use("/api/brand", BrandRoute)
-app.use("/api/body", BrandRoute)
+app.use("/api/body", BodyRoute)
 
 app.get("*", (req, res) => {
     res.status(404).json({

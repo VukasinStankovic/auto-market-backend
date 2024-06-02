@@ -12,9 +12,13 @@ export class VehicleService {
             select: {
                 vehicleId: true,
                 name: true,
+                numberOfDoors: true,
+                numberOfSeats: true,
                 price: true,
                 mileage: true,
                 productionYear: true,
+                horsepower: true,
+                kilowatts: true,
                 createdAt: true,
                 updatedAt: true,
                 transmission: {
@@ -32,6 +36,7 @@ export class VehicleService {
                     createdAt: true,
                     updatedAt: true,
                     brand: {
+                        brandId: true,
                         name: true,
                         createdAt: true,
                         updatedAt: true,
