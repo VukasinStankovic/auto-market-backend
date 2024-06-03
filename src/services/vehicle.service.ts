@@ -23,44 +23,37 @@ export class VehicleService {
                 updatedAt: true,
                 transmission: {
                     name: true,
-                    createdAt: true,
-                    updatedAt: true,
                 },
                 fuelType: {
                     name: true,
-                    createdAt: true,
-                    updatedAt: true,
                 },
                 model: {
                     name: true,
-                    createdAt: true,
-                    updatedAt: true,
                     brand: {
-                        brandId: true,
                         name: true,
-                        createdAt: true,
-                        updatedAt: true,
                     }
                 },
                 body: {
                     name: true,
-                    createdAt: true,
-                    updatedAt: true,
                 },
                 color: {
                     name: true,
-                    createdAt: true,
-                    updatedAt: true,
                 },
                 user: {
                     username: true,
                 },
                 vehicleEquipments: {
-                    equipmentId: true
+                    equipmentId: true,
+                    equipment: {
+                        name: true,
+                    },
                 },
                 vehicleImages: {
-                    imageId: true
-                },
+                    imageId: true,
+                    image: {
+                        imageUrl: true,
+                    }
+                }
             },
             where: {
                 deletedAt: IsNull(),
@@ -98,8 +91,12 @@ export class VehicleService {
                 color: true,
                 user: true,
                 transmission: true,
-                vehicleEquipments: true,
-                vehicleImages: true,
+                vehicleEquipments: {
+                    equipment: true
+                },
+                vehicleImages: {
+                    image: true
+                },
             }
         });
 

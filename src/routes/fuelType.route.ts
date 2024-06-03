@@ -1,6 +1,5 @@
 import {Router} from "express";
 import {handleRequest} from "../utils";
-import {TransmissionService} from "../services/transmission.service";
 import {FuelTypeService} from "../services/fuelType.service";
 
 export const FuelTypeRoute = Router()
