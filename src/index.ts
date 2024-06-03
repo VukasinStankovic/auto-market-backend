@@ -11,6 +11,8 @@ import {EquipmentRoute} from "./routes/equipment.route";
 import {ColorRoute} from "./routes/color.route";
 import {BrandRoute} from "./routes/brand.route";
 import {BodyRoute} from "./routes/body.route";
+import {UserRoute} from "./routes/user.route";
+import {authenticateToken} from "./utils";
 
 
 
@@ -29,6 +31,7 @@ AppDataSource.initialize().then(() => {
 }).catch((e) => {
     console.log(e);
 });
+app.use(authenticateToken)
 
 app.use("/api/vehicle", VehicleRoute)
 app.use("/api/transmission", TransmissionRoute)
@@ -38,6 +41,7 @@ app.use("/api/equipment", EquipmentRoute)
 app.use("/api/color", ColorRoute)
 app.use("/api/brand", BrandRoute)
 app.use("/api/body", BodyRoute)
+app.use("/api/user", UserRoute)
 
 app.get("*", (req, res) => {
     res.status(404).json({
