@@ -1,8 +1,10 @@
 import {AppDataSource} from "../db";
-import {IsNull} from "typeorm";
+import {Between, IsNull, LessThanOrEqual} from "typeorm";
 import {Vehicle} from "../entities/Vehicle";
 import {checkIfDefined} from "../utils";
 import {VehicleModel} from "../models/vehicle.model";
+import {FilterModel} from "../models/filter.model";
+import {fileName} from "typeorm-model-generator/dist/src/NamingStrategy";
 
 const repo = AppDataSource.getRepository(Vehicle);
 
@@ -100,6 +102,109 @@ export class VehicleService {
             }
         });
 
+        return checkIfDefined(data);
+    }
+
+    static async getVehiclesByFilter(filter: FilterModel) {
+        const data = await repo.find({
+            select: {
+                vehicleId: true,
+                name: true,
+                numberOfDoors: true,
+                numberOfSeats: true,
+                price: true,
+                mileage: true,
+                productionYear: true,
+                horsepower: true,
+                kilowatts: true,
+                createdAt: true,
+                updatedAt: true,
+                transmission: {
+                    name: true,
+                },
+                fuelType: {
+                    name: true,
+                },
+                model: {
+                    name: true,
+                    brand: {
+                        name: true,
+                    }
+                },
+                body: {
+                    name: true,
+                },
+                color: {
+                    name: true,
+                },
+                user: {
+                    username: true,
+                },
+                vehicleEquipments: {
+                    vehicleEquipmentId: true,
+                    equipment: {
+                        equipmentId: true,
+                        name: true,
+                    },
+                },
+                vehicleImages: {
+                    vehicleImageId: true,
+                    image: {
+                        imageId: true,
+                        imageUrl: true,
+                    }
+                }
+            },
+            where: {
+                price: filter.priceTo ? LessThanOrEqual(filter.priceTo) : undefined,
+                productionYear: Between(filter.yearFrom, filter.yearTo) ? Between(filter.yearFrom, filter.yearTo) : undefined,
+                deletedAt: IsNull(),
+                transmission: {
+                    deletedAt: IsNull()
+                },
+                body: {
+                    bodyId: filter.bodyId ? filter.bodyId : undefined,
+                    deletedAt: IsNull()
+                },
+                fuelType: {
+                    fuelTypeId: filter.fuelTypeId ? filter.fuelTypeId : undefined,
+                    deletedAt: IsNull()
+                },
+                model: {
+                    modelId: filter.modelId  ? filter.modelId : undefined,
+                    deletedAt: IsNull(),
+                    brand: {
+                        brandId: filter.brandId  ? filter.brandId : undefined,
+                        deletedAt: IsNull()
+                    }
+                },
+                color: {
+                    deletedAt: IsNull()
+                },
+                vehicleEquipments: {
+                    deletedAt: IsNull()
+                },
+                vehicleImages: {
+                    deletedAt: IsNull()
+                }
+            },
+            relations: {
+                fuelType: true,
+                model: {
+                    brand: true
+                },
+                body: true,
+                color: true,
+                user: true,
+                transmission: true,
+                vehicleEquipments: {
+                    equipment: true,
+                },
+                vehicleImages: {
+                    image: true
+                },
+            }
+        });
         return checkIfDefined(data);
     }
 

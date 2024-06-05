@@ -31,7 +31,7 @@ AppDataSource.initialize().then(() => {
 }).catch((e) => {
     console.log(e);
 });
-app.use(authenticateToken)
+// app.use(authenticateToken)
 
 app.use("/api/vehicle", VehicleRoute)
 app.use("/api/transmission", TransmissionRoute)
