@@ -100,59 +100,58 @@ export class VehicleService {
             }
         });
 
-        return checkIfDefined(data)
+        return checkIfDefined(data);
     }
 
-    // TODO: proveriti da li sve metode rade ispravno
-    static async getVehicleById(id: number){
+    static async getVehicleById(id: number) {
         const data = await repo.findOne({
             select: {
                 vehicleId: true,
                 name: true,
+                numberOfDoors: true,
+                numberOfSeats: true,
                 price: true,
                 mileage: true,
                 productionYear: true,
+                horsepower: true,
+                kilowatts: true,
                 createdAt: true,
                 updatedAt: true,
                 transmission: {
                     name: true,
-                    createdAt: true,
-                    updatedAt: true,
                 },
                 fuelType: {
                     name: true,
-                    createdAt: true,
-                    updatedAt: true,
                 },
                 model: {
                     name: true,
-                    createdAt: true,
-                    updatedAt: true,
                     brand: {
                         name: true,
-                        createdAt: true,
-                        updatedAt: true,
                     }
                 },
                 body: {
                     name: true,
-                    createdAt: true,
-                    updatedAt: true,
                 },
                 color: {
                     name: true,
-                    createdAt: true,
-                    updatedAt: true,
                 },
                 user: {
                     username: true,
                 },
                 vehicleEquipments: {
-                    equipmentId: true
+                    vehicleEquipmentId: true,
+                    equipment: {
+                        equipmentId: true,
+                        name: true,
+                    },
                 },
                 vehicleImages: {
-                    imageId: true
-                },
+                    vehicleImageId: true,
+                    image: {
+                        imageId: true,
+                        imageUrl: true,
+                    }
+                }
             },
             where: {
                 vehicleId: id,
@@ -191,15 +190,18 @@ export class VehicleService {
                 color: true,
                 user: true,
                 transmission: true,
-                vehicleEquipments: true,
-                vehicleImages: true,
+                vehicleEquipments: {
+                    equipment: true,
+                },
+                vehicleImages: {
+                    image: true
+                },
             }
-        })
-
-        return checkIfDefined(data)
+        });
+        return checkIfDefined(data);
     }
 
-    static async createVehicle(model: VehicleModel){
+    static async createVehicle(model: VehicleModel) {
         return await repo.save({
             fuelTypeId: model.fuelTypeId,
             bodyId: model.bodyId,
@@ -212,28 +214,28 @@ export class VehicleService {
             mileage: model.mileage,
             productionYear: model.productionYear,
             createdAt: new Date()
-        })
+        });
     }
 
-    static async updateVehicle(id: number, model: VehicleModel){
+    static async updateVehicle(id: number, model: VehicleModel) {
         const data = await this.getVehicleById(id);
         data.fuelTypeId = model.fuelTypeId,
-        data.bodyId = model.bodyId,
-        data.colorId = model.colorId,
-        data.userId = model.userId,
-        data.transmissionId = model.transmissionId,
-        data.modelId = model.modelId,
-        data.name = model.name,
-        data.price = model.price,
-        data.mileage = model.mileage,
-        data.productionYear = model.productionYear,
-        data.createdAt = new Date()
-        return await repo.save(data)
+            data.bodyId = model.bodyId,
+            data.colorId = model.colorId,
+            data.userId = model.userId,
+            data.transmissionId = model.transmissionId,
+            data.modelId = model.modelId,
+            data.name = model.name,
+            data.price = model.price,
+            data.mileage = model.mileage,
+            data.productionYear = model.productionYear,
+            data.createdAt = new Date();
+        return await repo.save(data);
     }
 
-    static async deleteVehicle(id: number){
+    static async deleteVehicle(id: number) {
         const data = await this.getVehicleById(id);
         data.deletedAt = new Date();
-        await repo.save(data)
+        await repo.save(data);
     }
 }

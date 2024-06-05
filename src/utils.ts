@@ -41,10 +41,12 @@ export function sendErrorResponse(res: Response, code = 400, msg = "Bad request"
 // Auth
 configDotenv()
 export async function authenticateToken(req, res, next) {
-    const unprotected = ['/api/user/login', '/api/user/refresh']
-    if (unprotected.includes(req.path)) {
-        next()
-        return
+    const unprotected = ['/api/user/login', '/api/user/refresh', '/api/vehicle']
+
+    // Check if the path is in the unprotected list or starts with /api/vehicle
+    if (unprotected.includes(req.path) || req.path.startsWith('/api/vehicle')) {
+        next();
+        return;
     }
 
     const authHeader = req.headers['authorization']
@@ -58,7 +60,7 @@ export async function authenticateToken(req, res, next) {
         if (err) {
             return sendErrorResponse(res, 403, 'INVALID_TOKEN')
         }
-        req.user = user
+        req.user = user.name
         next()
     })
 }
