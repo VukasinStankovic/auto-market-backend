@@ -22,8 +22,6 @@ export class BrandService {
         return checkIfDefined(data)
     }
 
-
-    // TODO: proveriti da li sve metode rade ispravno
     static async getBrandById(id: number){
         const data = await repo.findOne({
             select: {

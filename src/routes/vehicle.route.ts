@@ -17,7 +17,7 @@ VehicleRoute.get("/:id", async (req, res) => {
 })
 
 VehicleRoute.post('/', async (req, res) => {
-    await handleRequest(res, VehicleService.createVehicle(req.body));
+    await handleRequest(res, VehicleService.createVehicle(req.body.vehicle, req.body.images, req.body.equipments));
 });
 
 VehicleRoute.post("/filtered", async (req, res) => {

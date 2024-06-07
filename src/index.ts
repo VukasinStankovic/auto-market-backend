@@ -1,6 +1,7 @@
 import cors from "cors";
 import morgan from "morgan";
 import express from "express";
+import multer from "multer"
 import {configDotenv} from "dotenv";
 import {AppDataSource} from "./db";
 import {VehicleRoute} from "./routes/vehicle.route";
@@ -13,6 +14,7 @@ import {BrandRoute} from "./routes/brand.route";
 import {BodyRoute} from "./routes/body.route";
 import {UserRoute} from "./routes/user.route";
 import {authenticateToken} from "./utils";
+import * as path from "node:path";
 
 
 
@@ -20,6 +22,21 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(morgan("tiny"));
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "./images");
+    },
+    filename: (req, file, cb) => {
+        console.log(file);
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+})
+const upload = multer({storage: storage})
+
+app.post("/api/image", upload.single('image') , (req, res) => {
+    res.send("Image uploaded")
+})
 
 configDotenv();
 AppDataSource.initialize().then(() => {
@@ -31,6 +48,7 @@ AppDataSource.initialize().then(() => {
 }).catch((e) => {
     console.log(e);
 });
+
 // app.use(authenticateToken)
 
 app.use("/api/vehicle", VehicleRoute)

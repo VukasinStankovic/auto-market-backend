@@ -1,12 +1,19 @@
 import {AppDataSource} from "../db";
 import {Between, IsNull, LessThanOrEqual} from "typeorm";
 import {Vehicle} from "../entities/Vehicle";
+import {Image} from "../entities/Image";
+import {VehicleImage} from "../entities/VehicleImage";
 import {checkIfDefined} from "../utils";
 import {VehicleModel} from "../models/vehicle.model";
 import {FilterModel} from "../models/filter.model";
-import {fileName} from "typeorm-model-generator/dist/src/NamingStrategy";
+import {ImageModel} from "../models/image.model";
+import {EquipmentModel} from "../models/equipment.model";
+import {VehicleEquipment} from "../entities/VehicleEquipment";
 
 const repo = AppDataSource.getRepository(Vehicle);
+const imageRepo = AppDataSource.getRepository(Image);
+const vehicleEquipmentRepo = AppDataSource.getRepository(VehicleEquipment);
+const vehicleImageRepo = AppDataSource.getRepository(VehicleImage);
 
 export class VehicleService {
     static async getAllVehicles() {
@@ -306,20 +313,45 @@ export class VehicleService {
         return checkIfDefined(data);
     }
 
-    static async createVehicle(model: VehicleModel) {
-        return await repo.save({
-            fuelTypeId: model.fuelTypeId,
-            bodyId: model.bodyId,
-            colorId: model.colorId,
-            userId: model.userId,
-            transmissionId: model.transmissionId,
-            modelId: model.modelId,
-            name: model.name,
-            price: model.price,
-            mileage: model.mileage,
-            productionYear: model.productionYear,
+    static async createVehicle(vehicle: VehicleModel, images: ImageModel[], equipments: EquipmentModel[]) {
+        const newVehicle = await repo.save({
+            fuelTypeId: vehicle.fuelTypeId,
+            bodyId: vehicle.bodyId,
+            colorId: vehicle.colorId,
+            userId: vehicle.userId,
+            transmissionId: vehicle.transmissionId,
+            modelId: vehicle.modelId,
+            name: vehicle.name,
+            price: vehicle.price,
+            mileage: vehicle.mileage,
+            productionYear: vehicle.productionYear,
+            numberOfDoors: vehicle.numberOfDoors,
+            numberOfSeats: vehicle.numberOfSeats,
+            horsepower: vehicle.horsepower,
+            kilowatts: vehicle.kilowatts,
             createdAt: new Date()
         });
+
+        const newImages = await Promise.all(images.map(async (image) => {
+            return await imageRepo.save({
+                imageUrl: image.imageUrl
+            });
+        }));
+
+        const vehicleImages =   await Promise.all(newImages.map(async (image) => {
+            return await vehicleImageRepo.save({
+                vehicleId: newVehicle.vehicleId,
+                imageId: image.imageId
+            });
+        }));
+
+        // TODO: NE RADI - ISPRAVI
+        const vehicleEquipment = await Promise.all(equipments.map(async (equipment) => {
+            return await vehicleEquipmentRepo.save({
+                vehicleId: newVehicle.vehicleId,
+                equipmentId: equipment.equipmentId
+            });
+        }));
     }
 
     static async updateVehicle(id: number, model: VehicleModel) {
